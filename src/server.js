@@ -20,9 +20,6 @@ import prodRouter from './routers/productRouter.js'
   app.use('/user', userRouter)
   app.use('/prods', prodRouter)
   
-  app.get('/products', (req, res) => {
-    res.json({message: "Rota de Produtos"})
-  })
   //run server
   app.listen(PORT, () => {
     console.log(`Servidor Rodando em ${HOST}:${PORT}`)
