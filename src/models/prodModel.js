@@ -1,4 +1,53 @@
 import { prods } from "../db-memory/product.js";
+import { z } from "zod"
+
+const userSchema = z.object({
+    id: z
+        .number({
+            invalid_type_error: "O ID deve ser Numerico.",
+            required_error: "ID Obrigatorio"    
+        })
+        .int(),
+
+    name: z
+        .string({
+            invalid_type_error: "O Nome deve ser uma String.",
+            required_error: "Nome Obrigatorio"    
+        })
+        .min(3, {message: "Minimo de 3 Caracteres."})
+        .max(200, {message: "Maximo de 200 Caracteres."}),
+    
+    preco: z
+        .number({
+            invalid_type_error: "O Preco deve ser Numerico.",
+            required_error: "Preco Obrigatorio"    
+        })
+        .int(),
+    
+    tipo: z
+        .string({
+            invalid_type_error: "O Tipo deve ser uma String.",
+            required_error: "Tipo Obrigatorio"    
+        }),
+})
+
+const validateCreate = (prod) => {
+    const partialUserSchema = userSchema.partial({id: true})
+    return partialUserSchema.safeParse(prod)
+}
+
+const validateInsert = (prod) => {
+    return userSchema.safeParse(prod)
+}
+
+const validateId = (id) =>{
+    const partialUserSchema = userSchema.partial({
+		name: true,
+		preco: true,
+		tipo: true
+	})
+	return partialUserSchema.safeParse({id})
+}
 
 const list = () => {
     return prods
@@ -28,4 +77,4 @@ const insert = (newProd) =>{
       })
 }
 
-export default {list, create, remove, insert}
+export default {list, create, remove, insert, validateCreate, validateInsert, validateId}

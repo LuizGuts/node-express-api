@@ -5,7 +5,10 @@ const create = (req, res) => {
     const dataValidated = userModel.validateCreate(user)
     console.log(dataValidated)
     if(!dataValidated.success){
-      error: "Dados Invalidos!"
+      return res.status(400).json({
+        error: "Dados Invalidos!",
+        fields: dataValidated.error.flatten().fieldErrors
+      })    
     }
     else {const result = userModel.create(user)
     res.json({
